@@ -61,27 +61,36 @@ public class ImageTest{
 
             imgObj.saveImageToDisk("BlueTheme");
             */
-            /*
-            imgObj.getRed();
+            
+            //imgObj.getRed();
+		//imgObj.getGreen();
+		//imgObj.getBlue();
 
-            imgObj.show();
+            //imgObj.show();
 
-            imgObj.saveImageToDisk("RedTheme");
-            */
+            //imgObj.saveImageToDisk("RedTheme");
+            
             //imgObj.getGreen();
 
             //imgObj.show();
 
             //imgObj.saveImageToDisk("GreenTheme");
-            imgObj.rgbToYuv();
+            
+	    //imgObj.rgbToYuv();
 
-            imgObj.show();
+		//imgObj.rgbToYuv2();
 
+		//imgObj.yuvToRgb2(imgObj.rgbToYuv2());
+		imgObj.showImage(imgObj.yuvToRgb2(imgObj.rgbToYuv2()));	
+		
+
+            //imgObj.show();
+	   /*	
             BufferedImage imageYuvToRgb = null;
             imageYuvToRgb = imgObj.yuvToRgb(imgObj.getImage());
 
             imgObj.showImage(imageYuvToRgb);
-
+		*/
         }
         catch(IOException e){
             e.printStackTrace();

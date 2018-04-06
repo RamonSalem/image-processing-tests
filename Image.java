@@ -110,6 +110,70 @@ public class Image{
         }
     }
 
+	public float[][][] rgbToYuv2(){
+		float yuv[][][] = new float[this.width][this.height][3];	
+	
+		for(int i = 0; i < this.width; i++){
+		    for(int j = 0; j < this.height; j++ ){
+		
+			/*Get the respective values of r g and b*/ 
+			int rgb = this.image.getRGB(i,j);
+			Color c = new Color(rgb);
+			int red = (int) c.getRed();
+			int green = (int) c.getGreen();
+			int blue = (int) c.getBlue();
+
+		       /*Convert to yuv using the formula*/
+		       float y = (float)((0.299 * red) + (0.587 * green) + (0.114 * blue));
+		       float u = (float)((0.596 * red) - (0.274 * green) - (0.322 * blue));
+                       float v = (float)((0.211 * red) - (0.523 * green) + (0.312 * blue));
+					       
+			//int yuvValue = (y<<16) | (u<<8) | v;
+
+
+			yuv[i][j][0] = y;
+			yuv[i][j][1] = u;
+			yuv[i][j][2] = v;
+			//System.out.println(yuv[i][j][0] +" "+yuv[i][j][1] + " " + yuv[i][j][2] );
+
+
+			/*Pass the values to the image */
+			//this.image.setRGB(i,j,yuvValue);
+		    }
+		}
+		return yuv;
+    	}
+
+	public BufferedImage yuvToRgb2(float yuv[][][]){
+		BufferedImage newImage = new BufferedImage(this.width, this.height,1);		
+		
+		for(int i = 0; i < this.width; i++){
+		    for(int j = 0; j < this.height; j++ ){
+		       
+
+		        /*Convert to yuv using the formula*/
+		        float r =(float) ((1.000 * yuv[i][j][0]) + (0.956 * yuv[i][j][1]) + (0.621 * yuv[i][j][2]));
+			float g =(float) ((1.000 * yuv[i][j][0]) - (0.272 * yuv[i][j][1]) - (0.647 * yuv[i][j][2]));
+			float b =(float) ((1.000 * yuv[i][j][0]) - (1.106 * yuv[i][j][1]) + (1.703 * yuv[i][j][2]));
+		
+			//System.out.println("r: "+ r+ "g: "+ g);		
+
+			r = (r > 255 ? 255 : r);
+			g = (g > 255 ? 255 : g);
+			b = (b > 255 ? 255 : b); 
+
+		        int rgbValue = ((int)r<<16) | ((int)g<<8) | (int)b;
+		        /*Pass the values to the image */
+		        newImage.setRGB(i,j,rgbValue);
+		    }
+		}
+        return newImage;
+    }
+	
+
+
+
+
     public BufferedImage yuvToRgb(BufferedImage image){
         for(int i = 0; i < this.width; i++){
             for(int j = 0; j < this.height; j++ ){
@@ -125,6 +189,13 @@ public class Image{
                 int r = (int)(1.164*((double) y - 16.0) + 1.596*((double) v - 128.0));
                 int g = (int) (1.164*((double) y - 16.0) - 0.813*((double) v - 128.0) - 0.391*((double) u - 128.0));
                 int b = (int)(1.164*((double) y - 16.0)+ 2.018*((double) u - 128.0));
+		
+		//System.out.println("r: "+ r+ "g: "+ g);		
+
+
+		r = (r > 255 ? 255 : r);
+		g = (g > 255 ? 255 : g);
+		b = (b > 255 ? 255 : b); 
 
                 int rgbValue = (r<<16) | (g<<8) | b;
                 /*Pass the values to the image */
