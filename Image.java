@@ -57,7 +57,7 @@ public class Image{
 
 
 
-    public void getRed(){
+    public void bandaRed(){
 
         for(int i = 0; i < this.width; i++){
             for(int j = 0; j < this.height; j++ ){
@@ -73,7 +73,20 @@ public class Image{
         }
     }
 
-    public void getGreen(){
+    public void bandaBlue(){
+
+        for(int i = 0; i < this.width; i++){
+            for(int j = 0; j < this.height; j++ ){
+                int rgb = this.image.getRGB(i,j);
+                Color c = new Color(rgb);
+                int blue = c.getBlue();
+                Color newColor = new Color(0, 0, blue);
+                this.image.setRGB(i, j, newColor.getRGB());
+            }
+        }
+    }
+
+    public void bandaGreen(){
 
         for(int i = 0; i < this.width; i++){
             for(int j = 0; j < this.height; j++ ){
@@ -86,6 +99,53 @@ public class Image{
                 this.image.setRGB(i, j, newColor.getRGB());
             }
         }
+    }
+
+    public void bandaRedAndShow(BufferedImage image){
+        BufferedImage newImg = new BufferedImage(this.width, this.height,1);
+        for(int i = 0; i < this.width; i++){
+            for(int j = 0; j < this.height; j++ ){
+
+                int rgb = image.getRGB(i,j);
+                Color c = new Color(rgb);
+                int red = c.getRed();
+                Color newColor = new Color(red, 0, 0);
+
+                newImg.setRGB(i, j, newColor.getRGB());
+
+            }
+        }
+        this.showImage(newImg);
+    }
+
+    public void bandaBlueAndShow(BufferedImage image){
+        BufferedImage newImg = new BufferedImage(this.width, this.height,1);
+        for(int i = 0; i < this.width; i++){
+            for(int j = 0; j < this.height; j++ ){
+                int rgb = image.getRGB(i,j);
+                Color c = new Color(rgb);
+                int blue = c.getBlue();
+                Color newColor = new Color(0, 0, blue);
+                newImg.setRGB(i, j, newColor.getRGB());
+            }
+        }
+        this.showImage(newImg);
+    }
+
+    public void bandaGreenAndShow(BufferedImage image){
+        BufferedImage newImg = new BufferedImage(this.width, this.height,1);
+        for(int i = 0; i < this.width; i++){
+            for(int j = 0; j < this.height; j++ ){
+
+                int rgb = image.getRGB(i,j);
+                Color c = new Color(rgb);
+                int green = c.getGreen();
+                Color newColor = new Color(0, green, 0);
+
+                newImg.setRGB(i, j, newColor.getRGB());
+            }
+        }
+        this.showImage(newImg);
     }
 
     public void rgbToYuv(){
@@ -123,10 +183,10 @@ public class Image{
 			int green = (int) c.getGreen();
 			int blue = (int) c.getBlue();
 
-		       /*Convert to yuv using the formula*/
-		       float y = (float)((0.299 * red) + (0.587 * green) + (0.114 * blue));
-		       float u = (float)((0.596 * red) - (0.274 * green) - (0.322 * blue));
-                       float v = (float)((0.211 * red) - (0.523 * green) + (0.312 * blue));
+            /*Convert to yuv using the formula*/
+            float y = (float)((0.299 * red) + (0.587 * green) + (0.114 * blue));
+            float u = (float)((0.596 * red) - (0.274 * green) - (0.322 * blue));
+            float v = (float)((0.211 * red) - (0.523 * green) + (0.312 * blue));
 					       
 			//int yuvValue = (y<<16) | (u<<8) | v;
 
@@ -151,16 +211,16 @@ public class Image{
 		    for(int j = 0; j < this.height; j++ ){
 		       
 
-		        /*Convert to yuv using the formula*/
-		        float r =(float) ((1.000 * yuv[i][j][0]) + (0.956 * yuv[i][j][1]) + (0.621 * yuv[i][j][2]));
-			float g =(float) ((1.000 * yuv[i][j][0]) - (0.272 * yuv[i][j][1]) - (0.647 * yuv[i][j][2]));
-			float b =(float) ((1.000 * yuv[i][j][0]) - (1.106 * yuv[i][j][1]) + (1.703 * yuv[i][j][2]));
+                    /*Convert to yuv using the formula*/
+                float r =(float) ((1.000 * yuv[i][j][0]) + (0.956 * yuv[i][j][1]) + (0.621 * yuv[i][j][2]));
+                float g =(float) ((1.000 * yuv[i][j][0]) - (0.272 * yuv[i][j][1]) - (0.647 * yuv[i][j][2]));
+                float b =(float) ((1.000 * yuv[i][j][0]) - (1.106 * yuv[i][j][1]) + (1.703 * yuv[i][j][2]));
 		
 			//System.out.println("r: "+ r+ "g: "+ g);		
 
-			r = (r > 255 ? 255 : r);
-			g = (g > 255 ? 255 : g);
-			b = (b > 255 ? 255 : b); 
+                r = (r > 255 ? 255 : r);
+                g = (g > 255 ? 255 : g);
+                b = (b > 255 ? 255 : b); 
 
 		        int rgbValue = ((int)r<<16) | ((int)g<<8) | (int)b;
 		        /*Pass the values to the image */
@@ -203,19 +263,6 @@ public class Image{
             }
         }
         return image;
-    }
-
-    public void getBlue(){
-
-        for(int i = 0; i < this.width; i++){
-            for(int j = 0; j < this.height; j++ ){
-                int rgb = this.image.getRGB(i,j);
-                Color c = new Color(rgb);
-                int blue = c.getBlue();
-                Color newColor = new Color(0, 0, blue);
-                this.image.setRGB(i, j, newColor.getRGB());
-            }
-        }
     }
 
     public void saveImageToDisk(String newImageTitle) throws java.io.IOException{

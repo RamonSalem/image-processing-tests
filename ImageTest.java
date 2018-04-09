@@ -54,23 +54,23 @@ public class ImageTest{
             //imgObj.getRGBHex();
 
             //imgObj.getR();
-            //imgObj.getGreen();
-           /* imgObj.getBlue();
+            //imgObj.bandaGreen();
+           /* imgObj.bandaBlue();
 
             imgObj.show();
 
             imgObj.saveImageToDisk("BlueTheme");
             */
             
-            //imgObj.getRed();
-		//imgObj.getGreen();
-		//imgObj.getBlue();
+            //imgObj.bandaRed();
+		//imgObj.bandaGreen();
+		//imgObj.bandaBlue();
 
             //imgObj.show();
 
             //imgObj.saveImageToDisk("RedTheme");
             
-            //imgObj.getGreen();
+            //imgObj.bandaGreen();
 
             //imgObj.show();
 
@@ -81,7 +81,9 @@ public class ImageTest{
 		//imgObj.rgbToYuv2();
 
 		//imgObj.yuvToRgb2(imgObj.rgbToYuv2());
-		imgObj.showImage(imgObj.yuvToRgb2(imgObj.rgbToYuv2()));	
+        //imgObj.showImage(imgObj.yuvToRgb2(imgObj.rgbToYuv2()));
+        //ScreenBuilder sb = new ScreenBuilder(imgObj);
+        ScreenBuilder.makeMainPanel(imgObj, image);	
 		
 
             //imgObj.show();
