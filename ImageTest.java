@@ -7,6 +7,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ImageTest{
     
@@ -14,10 +15,8 @@ public class ImageTest{
         String imagePath = path; //"./img2.jpeg";
         
         BufferedImage myPicture = ImageIO.read(new File(imagePath));
-        System.out.println(myPicture.toString());
+        //System.out.println(myPicture.toString());
         return myPicture;
-    
-
     }
 
     public static Graphics2D transformGraphics2d(BufferedImage myPicture) throws java.io.IOException{
@@ -28,12 +27,41 @@ public class ImageTest{
         
         return g;
     }
+
+    public static BufferedImage chooseImage() throws java.io.IOException{
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "JPG & GIF Images", "jpg", "gif");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(null);
+        BufferedImage choosenImage = null;
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            System.out.println("You chose to open this file: " +
+            chooser.getSelectedFile().getName());
+
+            BufferedImage myPicture = ImageIO.read(chooser.getSelectedFile());
+
+            return myPicture;
+        }
+        else{
+            return choosenImage;
+        }
+    }
     
     public static void main(String args[]){
         //System.out.println("Works");
-
+        
         try{
-            BufferedImage image = ImageTest.readImage("./img2.jpeg");
+            //BufferedImage image = ImageTest.readImage("./img2.jpeg");
+            
+            Image imgObj = new Image();
+            
+            
+            imgObj.showImage(ImageTest.chooseImage());
+
+            
+
+
             //Graphics2D image2D = ImageTest.transformGraphics2d(image);
             //System.out.println(image2D.getBackground().toString());
             /*JLabel picLabel = new JLabel(new ImageIcon(image));
@@ -46,7 +74,6 @@ public class ImageTest{
 
             
 
-            Image imgObj = new Image(image);
 
             //imgObj.show();
             //imgObj.getR();
@@ -83,7 +110,8 @@ public class ImageTest{
 		//imgObj.yuvToRgb2(imgObj.rgbToYuv2());
         //imgObj.showImage(imgObj.yuvToRgb2(imgObj.rgbToYuv2()));
         //ScreenBuilder sb = new ScreenBuilder(imgObj);
-        ScreenBuilder.makeMainPanel(imgObj, image);	
+        //ScreenBuilder.makeMainPanel(imgObj, image);
+        
 		
 
             //imgObj.show();

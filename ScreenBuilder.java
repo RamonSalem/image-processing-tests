@@ -38,6 +38,8 @@ public class ScreenBuilder{
         window.setVisible(true);
     }
 
+    
+
 
     private static void setButtonEvent(JButton button, int type, Image imageOps, BufferedImage img ){
         if (type == 1){
