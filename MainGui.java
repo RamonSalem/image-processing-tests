@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -33,6 +34,8 @@ import java.awt.TextField;
 public class MainGui {
 
 	private JFrame frame;
+
+	private ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
 	
 	/*Image selector*/
 	public static BufferedImage chooseImage() throws java.io.IOException{
@@ -57,6 +60,15 @@ public class MainGui {
 		panel.revalidate();
 		panel.repaint();
 	}
+	
+	/*Clear all images of a panel*/
+	
+	public static void clearPanel(JPanel panel) {
+		panel.removeAll();
+		panel.revalidate();
+		panel.repaint();
+	}
+	
 
 	/**
 	 * Launch the application.
@@ -103,6 +115,17 @@ public class MainGui {
 		/*Menu bar with the options*/
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
+		/*Down panel*/
+		Panel downPanel = new Panel();
+		
+		/*Text buttons*/
+		TextField aditiveControlText = new TextField();
+		aditiveControlText.setText("Controle aditivo");
+		
+		TextField multiplicativeControlText = new TextField();
+		multiplicativeControlText.setText("Controle multiplicativo");
+		
+		
 		
 		JMenu mnNewMenu = new JMenu("Op\u00E7\u00F5es");
 		menuBar.add(mnNewMenu);
@@ -113,8 +136,11 @@ public class MainGui {
 				try {
 					//imgObj.show();
 					BufferedImage newImage = MainGui.chooseImage();
+					images.add(newImage);
 					imgObj.setImage(newImage);
 					MainGui.setImageOnFrame(imagePanel, newImage);
+
+					System.out.println(images.size());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -123,19 +149,29 @@ public class MainGui {
 		});
 		
 		mnNewMenu.add(mntmAbrirImagem);
+		/*Menu item to click and clear panel*/
+		JMenuItem jMenuItemClearAll = new JMenuItem("Limpar");
+		jMenuItemClearAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainGui.clearPanel(imagePanel);
+				images.clear();
+			}
+		});
+		mnNewMenu.add(jMenuItemClearAll);
 		
 		JMenuItem mntmSair = new JMenuItem("Sair");
 		mnNewMenu.add(mntmSair);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		
-		
+
 		frame.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
+		/*Top panel configs and basic actions*/ 
 		JPanel topPanel = new JPanel();
 		panel.add(topPanel, BorderLayout.NORTH);
 		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
+		/*Button that shows red scheme*/
 		JButton btnShowRed = new JButton("Banda R");
 		btnShowRed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -146,6 +182,7 @@ public class MainGui {
 		});
 		topPanel.add(btnShowRed);
 		
+		/*Button that shows green scheme*/
 		JButton btnShowGreen = new JButton("Banda G");
 		btnShowGreen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -155,7 +192,7 @@ public class MainGui {
 			}
 		});
 		topPanel.add(btnShowGreen);
-		
+		/*Button that shows blue scheme*/
 		JButton btnShowBlue = new JButton("Banda B");
 		btnShowBlue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -166,7 +203,8 @@ public class MainGui {
 			}
 		});
 		topPanel.add(btnShowBlue);
-		
+
+		/*Button that shows gray scale*/
 		JButton btnGrayScale = new JButton("Escala de cinza");
 		btnGrayScale.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -177,7 +215,8 @@ public class MainGui {
 			}
 		});
 		topPanel.add(btnGrayScale);
-		
+
+		/*Button that shows negative rgb*/
 		JButton btmNegativeRgb = new JButton("Negativo RGB");
 		
 		btmNegativeRgb.addActionListener(new ActionListener() {
@@ -190,6 +229,8 @@ public class MainGui {
 			});
 		
 		topPanel.add(btmNegativeRgb);
+
+		/*Button that shows Y*/
 		
 		JButton btnNegativeY = new JButton("Negativo Y");
 		
@@ -203,29 +244,68 @@ public class MainGui {
 			});
 		topPanel.add(btnNegativeY);
 		
-		Panel downPanel = new Panel();
+		JButton btnClearRightSpot = new JButton("Limpar");
+		btnClearRightSpot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainGui.clearPanel(imageResultPanel);
+			}
+		});
+		topPanel.add(btnClearRightSpot);
+		
+		
 		panel.add(downPanel, BorderLayout.SOUTH);
 		
+		/**Button, in down panel, used to additive control */
 		JButton btnAdditiveControl = new JButton("Aplicar");
 		btnAdditiveControl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					//int valueToAdd = Integer.parseInt(aditiveControlText.getText()); 
+					MainGui.setImageOnFrame(imageResultPanel, imgObj.aditiveControl(imgObj.getImage(),
+							Integer.parseInt(aditiveControlText.getText())
+					));
+				}catch(NumberFormatException exception) {
+					System.out.println(exception);
+				}
 			}
 		});
 		
-		TextField aditiveControl = new TextField();
-		aditiveControl.setText("Controle aditivo");
-		downPanel.add(aditiveControl);
+		downPanel.add(aditiveControlText);
 		downPanel.add(btnAdditiveControl);
 		
 		JTextPane textPane = new JTextPane();
 		downPanel.add(textPane);
 		
-		TextField textField = new TextField();
-		textField.setText("Controle multiplicativo");
-		downPanel.add(textField);
-		
+		downPanel.add(multiplicativeControlText);
+
+		/**Button, in down panel, used to multiplicative control */
 		JButton btnMultiplicativeControl = new JButton("Aplicar");
+		btnMultiplicativeControl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					//int valueToAdd = Integer.parseInt(aditiveControlText.getText()); 
+					MainGui.setImageOnFrame(imageResultPanel, imgObj.multiplicativeControl(imgObj.getImage(),
+							Integer.parseInt(multiplicativeControlText.getText())
+							));
+				}catch(NumberFormatException exception) {
+					System.out.println(exception);
+				}
+			}
+		});
 		downPanel.add(btnMultiplicativeControl);
+		
+		JButton btnSuperposition = new JButton("Sobreposi\u00E7\u00E3o");
+		btnSuperposition.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(images.size() >= 2) {
+					
+					MainGui.setImageOnFrame(imageResultPanel,
+							imgObj.overlapImages(images.get(images.size()-2) , images.get(images.size()-1)));
+				}
+			}
+		});
+		downPanel.add(btnSuperposition);
 		
 		JSplitPane splitPane = new JSplitPane();
 		panel.add(splitPane, BorderLayout.CENTER);

@@ -298,6 +298,64 @@ public class Image{
         }
         return newImg;
     }
+    
+    public BufferedImage aditiveControl(BufferedImage image, int value){
+    	BufferedImage newImg = new BufferedImage(image.getWidth(),image.getHeight(),1);
+        for(int i = 0; i < image.getWidth(); i++){
+            for(int j = 0; j < image.getHeight(); j++ ){
+
+                int rgb = image.getRGB(i,j);
+                Color c = new Color(rgb);
+                int g = c.getGreen();
+                int r = c.getRed();
+                int b = c.getBlue();
+                
+                r = r + value;
+                g = g + value;
+                b = b + value;
+                
+                r = (r > 255 ? 255 : r);
+                g = (g > 255 ? 255 : g);
+                b = (b > 255 ? 255 : b);
+                
+                r = (r < 0 ? 0 : r);
+                g = (g < 0 ? 0 : g);
+                b = (b < 0 ? 0 : b);
+                
+                newImg.setRGB(i, j, new Color(r,g,b).getRGB());
+            }
+        }
+        return newImg;	
+    }
+    
+    public BufferedImage multiplicativeControl(BufferedImage image, int value){
+    	BufferedImage newImg = new BufferedImage(image.getWidth(),image.getHeight(),1);
+        for(int i = 0; i < image.getWidth(); i++){
+            for(int j = 0; j < image.getHeight(); j++ ){
+
+                int rgb = image.getRGB(i,j);
+                Color c = new Color(rgb);
+                int g = c.getGreen();
+                int r = c.getRed();
+                int b = c.getBlue();
+                
+                r = r * value;
+                g = g * value;
+                b = b * value;
+                
+                r = (r > 255 ? 255 : r);
+                g = (g > 255 ? 255 : g);
+                b = (b > 255 ? 255 : b);
+                
+                r = (r < 0 ? 0 : r);
+                g = (g < 0 ? 0 : g);
+                b = (b < 0 ? 0 : b);
+                
+                newImg.setRGB(i, j, new Color(r,g,b).getRGB());
+            }
+        }
+        return newImg;	
+    }
 
 	public float[][][] rgbToYuv2(){
 		float yuv[][][] = new float[this.width][this.height][3];	
@@ -410,7 +468,34 @@ public class Image{
     }
 	
 	
-	
+	public BufferedImage overlapImages(BufferedImage img1, BufferedImage img2) {
+		
+		BufferedImage newImg = new BufferedImage(img1.getWidth(),img1.getHeight(),1);
+        for(int i = 0; i < img1.getWidth(); i++){
+            for(int j = 0; j < img1.getHeight(); j++ ){
+
+                int rgbImg1 = img1.getRGB(i,j);
+                int rgbImg2 = img2.getRGB(i,j);
+                
+                Color cImg1 = new Color(rgbImg1);
+                Color cImg2 = new Color(rgbImg2);
+                int g = (cImg1.getGreen() + cImg2.getGreen()) / 2;
+                int r = (cImg1.getRed() + cImg2.getRed()) / 2;
+                int b = (cImg1.getBlue() + cImg2.getBlue()) / 2;
+                
+                r = (r > 255 ? 255 : r);
+                g = (g > 255 ? 255 : g);
+                b = (b > 255 ? 255 : b);
+                
+                r = (r < 0 ? 0 : r);
+                g = (g < 0 ? 0 : g);
+                b = (b < 0 ? 0 : b);
+                
+                newImg.setRGB(i, j, new Color(r,g,b).getRGB());
+            }
+        }
+        return newImg;	
+	}
 
 
 
