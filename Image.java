@@ -531,9 +531,30 @@ public class Image{
         return image;
     }
 
-    public void saveImageToDisk(String newImageTitle) throws java.io.IOException{
-        File outputFile = new File(newImageTitle+".jpeg");
-        ImageIO.write(this.image, "jpeg", outputFile);
+    public void saveImageToDisk(BufferedImage image, String newImageTitle, String path) throws java.io.IOException{
+        
+    	path = path+"\\"+newImageTitle;
+    	
+    	String[] acceptedFormats = {"jpeg","png","jpg","gif","JPG","PNG"};
+        
+        if(path.contains(".") && hasFormat(acceptedFormats, path.substring(path.indexOf(".")+1, path.length())) ) {
+        	File outputFile = new File(path);
+        	ImageIO.write(image, path.substring(path.indexOf(".")+1, path.length()), outputFile);        	
+        }else {
+        	path = path+".jpg";
+        	File outputFile = new File(path);
+        	ImageIO.write(image, "jpg", outputFile);
+        }
+        
+    }
+    
+    private boolean hasFormat(String[] formats, String format) {
+    	for(int i = 0; i < formats.length; i++) {
+    		if(formats[i].equals(format)) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
     public void getRGBHex(){
